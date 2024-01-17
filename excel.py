@@ -88,5 +88,11 @@ if __name__ == '__main__':
         {'name': 'John', 'age': 22, 'Address': 'xxx'},
     ]
 
-    (excel_manager.add_header(data_headers).add_blank().add_data_records_to_datatable(data_records)
-     .create_range().make_table('Table1').set_table_style().add_table_to_sheet().save('my_excel.xlsx'))
+    (excel_manager
+     .add_header(data_headers)
+     .add_blank()
+     .add_data_records_to_datatable(data_records)
+     .create_range()
+     .make_table('Table1')
+     .set_table_style()
+     .add_table_to_sheet().save('my_excel.xlsx'))
