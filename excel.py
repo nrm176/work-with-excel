@@ -1,25 +1,26 @@
 import openpyxl
+from openpyxl.workbook import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.worksheet.table import Table, TableStyleInfo
-from typing import Self
+from typing import List, Dict, Union, Self
 
 
 class ExcelManager:
 
-    def __init__(self):
-        self.wb = openpyxl.Workbook()
-        self.sheet = self.wb.active
-        self.header: list = []
-        self.records: list = []
-        self.starting_cell: str = None
-        self.ending_cell: str = None
-        self.range = None
-        self.table = None
+    def __init__(self) -> None:
+        self.wb: Workbook = openpyxl.Workbook()
+        self.sheet: Worksheet = self.wb.active
+        self.header: List[Dict[str, Union[str, int]]] = []
+        self.records: List[Dict[str, Union[str, int]]] = []
+        self.starting_cell: str = ''
+        self.ending_cell: str = ''
+        self.range: Union[str, None] = None
+        self.table: Union[Table, None] = None
+
+    def read(self) -> None:
         pass
 
-    def read(self):
-        pass
-
-    def add_header(self, headers: [dict]) -> Self:
+    def add_header(self, headers: List[Dict[str, str]]) -> Self:
         self.header = headers
         for header in headers:
             self.sheet.append([header['label'], header['value']])
@@ -29,20 +30,20 @@ class ExcelManager:
         self.sheet.append([])
         return self
 
-    def add_data_records_to_datatable(self, records: [dict]) -> Self:
+    def add_data_records_to_datatable(self, records: List[Dict[str, Union[str, int]]]) -> Self:
         self.records = records
         self.sheet.append(list(records[0].keys()))
         for record in records:
             self.sheet.append(list(record.values()))
         return self
 
-    def create_range(self):
-        start_cell_column = 'A'
-        start_cell_row = len(self.header) + 2
+    def create_range(self) -> Self:
+        start_cell_column: str = 'A'
+        start_cell_row: int = len(self.header) + 2
         self.starting_cell = f"{start_cell_column}{str(start_cell_row)}"
 
-        end_cell_column = chr(ord(start_cell_column) + len(list(self.records[0].keys())) - 1)
-        end_cell_row = start_cell_row + len(self.records)
+        end_cell_column: str = chr(ord(start_cell_column) + len(list(self.records[0].keys())) - 1)
+        end_cell_row: int = start_cell_row + len(self.records)
         self.ending_cell = f"{end_cell_column}{str(end_cell_row)}"
 
         self.range = f'{self.starting_cell}:{self.ending_cell}'
@@ -93,6 +94,6 @@ if __name__ == '__main__':
      .add_blank()
      .add_data_records_to_datatable(data_records)
      .create_range()
-     .make_table('Table1')
+     .make_table('Table20')
      .set_table_style()
-     .add_table_to_sheet().save('my_excel.xlsx'))
+     .add_table_to_sheet().save('my_excel_.xlsx'))
